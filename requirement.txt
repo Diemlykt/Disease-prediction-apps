@@ -1,0 +1,13 @@
+torch
+numpy
+scikit-learn
+tqdm
+fastapi
+pymongo
+gridfs
+pandas
+opencv-python
+Pillow
+joblib
+streamlit
+requests
