@@ -129,8 +129,8 @@ async def predict_image(image_id: str):
     img = Image.open(io.BytesIO(image_data)).convert('RGB')
     image_tensor = transform(img).to(device)
     with torch.no_grad():
-        mean = torch.mean(image_tensor)
-        std = torch.std(image_tensor)
+        mean = torch.mean(image_tensor).unsqueeze(0)
+        std = torch.std(image_tensor).unsqueeze(0)
         outputs = imaging_model(image_tensor.unsqueeze(0), mean, std).squeeze().cpu().numpy()
         pred = torch.argmax(outputs, dim=1)
     class_names = ['Non-Demented', 'Very Mild Demented', 'Mild Demented', 'Moderate Demented']
