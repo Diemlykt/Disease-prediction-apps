@@ -11,3 +11,4 @@ Pillow
 joblib
 streamlit
 requests
+uvicorn
