@@ -96,7 +96,7 @@ with tab1:
                 st.error(f"Error: {str(e)}")
     
     # if st.button("Predict Alzheimer’s (Clinical)") and 'clinical_patient_id' in st.session_state:
-    if st.button("Predict Alzheimer’s (Clinical)"):
+    if st.button("Predict Alzheimer’s (Clinical)") in st.session_state:
         try:
             # Request clinical prediction
             response = requests.post(f"{FASTAPI_URL}/predict/clinical", params={"patient_id": st.session_state['clinical_patient_id']})
