@@ -91,10 +91,10 @@ async def upload_csv(file: UploadFile = File(...)):
     if file.filename.endswith(".csv"):
         df = pd.read_csv(file.file)
         df.fillna(0, inplace=True)
-        df["patient_id"] = [f"P{i:03d}" for i in range(len(df))]
+        # df["patient_id"] = [f"P{i:03d}" for i in range(len(df))]
         records = df.to_dict("records")
         result = db["records"].insert_many(records)
-        return {"status": f"Uploaded {len(records)} records", "ids": [str(id) for id in result.inserted_ids]}
+        return {"status": f"Uploaded {len(records)} records", "ids": [str(id) for id in result.inserted_ids], "patient_ids": df["patient_id"].tolist()}
     raise HTTPException(status_code=400, detail="Invalid file")
 
 @app.post("/upload/image")
