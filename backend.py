@@ -12,11 +12,27 @@ import io
 from bson import ObjectId
 from model2use import CNN  # Import your model definitions
 import joblib
+import os
+
+# Get the directory where backend.py is located
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Construct full path to the model file
+model_path = os.path.join(BASE_DIR, 'model', 'CNN.pt')
+scaler_path = os.path.join(BASE_DIR, 'model', 'scaler.pkl')
+
+# Example: load a PyTorch model
+import torch
+
+model = torch.load(model_path)
+model.eval()
 
 app = FastAPI()
 client = MongoClient("mongodb+srv://diemly:fQg9TNKzmmRd9g9M@alzheimer.x2velvm.mongodb.net/?retryWrites=true&w=majority&appName=Alzheimer")
 db = client["health_data"]
 fs = gridfs.GridFS(db)
+
+
 
 # Load models
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
