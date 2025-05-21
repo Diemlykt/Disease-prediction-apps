@@ -13,3 +13,4 @@ streamlit
 requests
 uvicorn
 xgboost
+python-multipart
