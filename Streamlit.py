@@ -75,10 +75,11 @@ tab1, tab2 = st.tabs(["Clinical Data Upload", "MRI Image Upload"])
 
 with tab1:
     st.header("Upload Clinical Data (CSV)")
-    patient_id_clinical = st.text_input("Patient ID (Clinical)", "P001", key="clinical_id")
+    # patient_id_clinical = st.text_input("Patient ID (Clinical)", "P001", key="clinical_id")
     clinical_file = st.file_uploader("Upload CSV (32 features: Age, MMSE, BMI, etc.)", type=["csv"], key="clinical_upload")
     
-    if clinical_file and patient_id_clinical:
+    # if clinical_file and patient_id_clinical:
+    if clinical_file:
         if st.button("Upload Clinical Data"):
             try:
                 # Send CSV to FastAPI
@@ -87,13 +88,15 @@ with tab1:
                     result = response.json()
                     st.success(f"{result['status']}")
                     st.write(f"Record IDs: {', '.join(result['ids'])}")
-                    st.session_state['clinical_patient_id'] = patient_id_clinical
+                    st.session_state['clinical_patient_id'] = result['patient_id']
+
                 else:
                     st.error(f"Upload failed: {response.json().get('detail', 'Unknown error')}")
             except Exception as e:
                 st.error(f"Error: {str(e)}")
     
-    if st.button("Predict Alzheimer’s (Clinical)") and 'clinical_patient_id' in st.session_state:
+    # if st.button("Predict Alzheimer’s (Clinical)") and 'clinical_patient_id' in st.session_state:
+    if st.button("Predict Alzheimer’s (Clinical)"):
         try:
             # Request clinical prediction
             response = requests.post(f"{FASTAPI_URL}/predict/clinical", params={"patient_id": st.session_state['clinical_patient_id']})
