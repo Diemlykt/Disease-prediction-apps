@@ -1,3 +1,9 @@
+import os
+import sys
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_DIR = os.path.join(BASE_DIR, 'Model')
+sys.path.append(MODEL_DIR)
+
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from pymongo import MongoClient
 import gridfs
@@ -12,10 +18,10 @@ import io
 from bson import ObjectId
 from model2use import CNN  # Import your model definitions
 import joblib
-import os
+from fastapi.middleware.cors import CORSMiddleware
+
 
 # Get the directory where backend.py is located
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Construct full path to the model file
 CNN_path = os.path.join(BASE_DIR, 'Model', 'CNN.pt')
@@ -33,6 +39,13 @@ client = MongoClient("mongodb+srv://diemly:fQg9TNKzmmRd9g9M@alzheimer.x2velvm.mo
 db = client["health_data"]
 fs = gridfs.GridFS(db)
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # Load models
