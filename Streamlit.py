@@ -2,7 +2,6 @@ import streamlit as st
 import requests
 import json
 
-uvicorn backend:app --host 0.0.0.0 --port 8000
 st.title("Alzheimer’s Prediction System")
 
 tab1, tab2 = st.tabs(["Clinical Data Upload", "MRI Image Upload"])
