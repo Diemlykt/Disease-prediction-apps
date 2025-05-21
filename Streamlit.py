@@ -25,7 +25,11 @@ with tab1:
             for class_name, prob in result['probabilities'].items():
                 st.write(f"{class_name}: {prob:.2%}")
         else:
-            st.error(response.json().get('detail', 'Prediction failed'))
+            try:
+                error_detail = response.json().get('detail', 'Prediction failed')
+            except Exception:
+                error_detail = f"Backend error: {response.text[:300]}"  # Show raw response safely
+            st.error(error_detail)
 
 with tab2:
     st.header("Upload MRI Image")
