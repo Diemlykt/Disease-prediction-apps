@@ -18,6 +18,7 @@ from bson import ObjectId
 from model2use import CNN  # Import your model definitions
 import joblib
 from fastapi.middleware.cors import CORSMiddleware
+import xgboost as xgb
 
 
 # Get the directory where backend.py is located
@@ -46,7 +47,9 @@ app.add_middleware(
 # Load models
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 scaler = joblib.load(scaler_path)
-clinical_model = joblib.load(xgboost_path)
+clinical_model = xgb.XGBClassifier()
+clinical_model.load_model("Model/xgboost_model.json")
+# clinical_model = joblib.load(xgboost_path)
 imaging_model = CNN().to(device)
 imaging_model.load_state_dict(torch.load(CNN_path, map_location=device))
 imaging_model.eval()
