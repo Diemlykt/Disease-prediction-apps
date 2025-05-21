@@ -14,7 +14,7 @@ with tab1:
         if st.button("Upload Clinical Data"):
             url = "https://disease-prediction-apps.onrender.com/upload/csv"
             response = requests.post(url, files={"file": clinical_file})
-            st.write(response.json())
+            # st.write(response.json())
     if st.button("Predict Alzheimer’s (Clinical)"):
         url = f"https://disease-prediction-apps.onrender.com/predict/clinical?patient_id={patient_id_clinical}"
         response = requests.post(url)
