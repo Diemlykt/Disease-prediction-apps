@@ -50,9 +50,9 @@ scaler = joblib.load(scaler_path)
 clinical_model = xgb.XGBClassifier()
 clinical_model.load_model("Model/xgboost_model.json")
 # clinical_model = joblib.load(xgboost_path)
-imaging_model = CNN().to(device)
-imaging_model.load_state_dict(torch.load(CNN_path, map_location=device))
-imaging_model.eval()
+# imaging_model = CNN().to(device)
+# imaging_model.load_state_dict(torch.load(CNN_path, map_location=device))
+# imaging_model.eval()
 
 # Image preprocessing
 transform = transforms.Compose([
@@ -80,6 +80,11 @@ numeric_features_to_scale = [
     'CholesterolTriglycerides', 'MMSE', 'FunctionalAssessment', 'ADL'
 ]
 
+def get_imaging_model():
+    model = CNN().to(device)
+    model.load_state_dict(torch.load(CNN_path, map_location=device))
+    model.eval()
+    return model
 
 @app.post("/upload/csv")
 async def upload_csv(file: UploadFile = File(...)):
@@ -142,6 +147,7 @@ async def predict_image(image_id: str):
     with torch.no_grad():
         mean = torch.mean(image_tensor).unsqueeze(0)
         std = torch.std(image_tensor).unsqueeze(0)
+        imaging_model = get_imaging_model()
         outputs = imaging_model(image_tensor.unsqueeze(0), mean, std).squeeze().cpu().numpy()
         pred = torch.argmax(outputs, dim=1)
     class_names = ['Non-Demented', 'Very Mild Demented', 'Mild Demented', 'Moderate Demented']
