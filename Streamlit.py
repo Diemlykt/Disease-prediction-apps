@@ -12,11 +12,11 @@ with tab1:
     clinical_file = st.file_uploader("Upload CSV (e.g., age, MMSE)", type=["csv"], key="clinical_upload")
     if clinical_file and patient_id_clinical:
         if st.button("Upload Clinical Data"):
-            url = "http://localhost:8000/upload/csv"
+            url = "https://disease-prediction-apps.onrender.com/upload/csv"
             response = requests.post(url, files={"file": clinical_file})
             st.write(response.json())
     if st.button("Predict Alzheimer’s (Clinical)"):
-        url = f"http://localhost:8000/predict/clinical?patient_id={patient_id_clinical}"
+        url = f"https://disease-prediction-apps.onrender.com/predict/clinical?patient_id={patient_id_clinical}"
         response = requests.post(url)
         if response.status_code == 200:
             result = response.json()
@@ -33,7 +33,7 @@ with tab2:
     image_file = st.file_uploader("Upload MRI (PNG/JPG)", type=["png", "jpg"], key="image_upload")
     if image_file and patient_id_image:
         if st.button("Upload Image"):
-            url = f"http://localhost:8000/upload/image?patient_id={patient_id_image}"
+            url = f"https://disease-prediction-apps.onrender.com/upload/image?patient_id={patient_id_image}"
             response = requests.post(url, files={"file": image_file})
             if response.status_code == 200:
                 image_id = response.json().get('image_id')
@@ -42,7 +42,7 @@ with tab2:
             else:
                 st.error(response.json().get('detail', 'Upload failed'))
     if st.button("Predict Alzheimer’s (MRI)") and 'image_id' in st.session_state:
-        url = f"http://localhost:8000/predict/image?image_id={st.session_state['image_id']}"
+        url = f"https://disease-prediction-apps.onrender.com/predict/image?image_id={st.session_state['image_id']}"
         response = requests.post(url)
         if response.status_code == 200:
             result = response.json()
