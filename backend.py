@@ -18,8 +18,9 @@ import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Construct full path to the model file
-model_path = os.path.join(BASE_DIR, 'model', 'CNN.pt')
-scaler_path = os.path.join(BASE_DIR, 'model', 'scaler.pkl')
+CNN_path = os.path.join(BASE_DIR, 'Model', 'CNN.pt')
+scaler_path = os.path.join(BASE_DIR, 'Model', 'scaler.pkl')
+xgboost_path = os.path.join(BASE_DIR, 'Model', 'xgboost_model.pkl')
 
 # Example: load a PyTorch model
 import torch
@@ -36,10 +37,10 @@ fs = gridfs.GridFS(db)
 
 # Load models
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-scaler = joblib.load('scaler.pkl')
-clinical_model = joblib.load('xgboost_model.pkl')
+scaler = joblib.load(scaler_path)
+clinical_model = joblib.load(xgboost_path)
 imaging_model = CNN().to(device)
-imaging_model.load_state_dict(torch.load('CNN.pt', map_location=device))
+imaging_model.load_state_dict(torch.load(CNN_path, map_location=device))
 imaging_model.eval()
 
 # Image preprocessing
