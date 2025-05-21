@@ -3,7 +3,7 @@ import sys
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_DIR = os.path.join(BASE_DIR, 'Model')
 sys.path.append(MODEL_DIR)
-
+import torch
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from pymongo import MongoClient
 import gridfs
@@ -29,10 +29,6 @@ scaler_path = os.path.join(BASE_DIR, 'Model', 'scaler.pkl')
 xgboost_path = os.path.join(BASE_DIR, 'Model', 'xgboost_model.pkl')
 
 # Example: load a PyTorch model
-import torch
-
-model = torch.load(model_path)
-model.eval()
 
 app = FastAPI()
 client = MongoClient("mongodb+srv://diemly:fQg9TNKzmmRd9g9M@alzheimer.x2velvm.mongodb.net/?retryWrites=true&w=majority&appName=Alzheimer")
