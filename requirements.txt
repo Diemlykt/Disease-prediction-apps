@@ -12,3 +12,4 @@ joblib
 streamlit
 requests
 uvicorn
+xgboost
