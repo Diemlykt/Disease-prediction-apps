@@ -26,7 +26,7 @@ with tab1:
                     result = response.json()
                     st.success(f"{result['status']}")
                     st.write(f"Record IDs: {', '.join(result['ids'])}")
-                    st.session_state['clinical_patient_id'] = result['patient_ids']
+                    st.session_state['clinical_patient_id'] = result['patient_ids'][0]
 
                 else:
                     st.error(f"Upload failed: {response.json().get('detail', 'Unknown error')}")
