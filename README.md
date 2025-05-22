@@ -91,10 +91,12 @@ Scan the QR code below to access the deployed Alzheimer’s Disease Prediction A
 
 ### Clinical data upload interface
 ![CSV upload](https://github.com/Diemlykt/Disease-prediction-apps/blob/179610fd4cb15403a889fd889b82771eeb74c08d/Screenshot/Screenshot%20Clinical-1.jpg)
+
 Figure 1: Screenshot of the Streamlit interface showing the clinical data input form and prediction output.
  
 ### MRI Image upload interface
 ![Image upload](https://github.com/Diemlykt/Disease-prediction-apps/blob/179610fd4cb15403a889fd889b82771eeb74c08d/Screenshot/Screenshot%20Image%20update.jpg)
+
 Figure 2: Screenshot of the Streamlit interface showing the image prediction.
 ---
 
