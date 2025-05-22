@@ -81,20 +81,21 @@ The solution is built using a microservice architecture with a FastAPI backend, 
 ---
 
 ## User Interface
-The Streamlit frontend provides an intuitive interface for healthcare professionals to input clinical data or upload brain MRI/CT scans. Prediction results are displayed instantly, with options to view confidence scores and download reports. The interface is designed for ease of use, ensuring seamless integration into clinical workflows.
-Scan the QR code below to access the deployed Alzheimer’s Disease Prediction Application. Use file in example_file to test the app
+The Streamlit frontend provides an intuitive interface for healthcare professionals to input clinical data or upload brain MRI/CT scans. Prediction results are displayed instantly. The interface is designed for ease of use, ensuring seamless integration into clinical workflows.
+Scan the QR code below to access the deployed Alzheimer’s Disease Prediction Application. 
+Use files in example_file to test the app
+
 ### Application QR Code
 <img src="https://raw.githubusercontent.com/Diemlykt/Disease-prediction-apps/792f0e08711ed0fcd7621c38c2f4688386a1bfd7/Alzheimer_qrcode.png" alt="QR Code" width="150" height="150">
-
-Figure 1: Screenshot of the Streamlit interface showing the clinical data input form and prediction output. 
+ 
 
 ### Clinical data upload
 ![CSV upload](https://github.com/Diemlykt/Disease-prediction-apps/blob/179610fd4cb15403a889fd889b82771eeb74c08d/Screenshot/Screenshot%20Clinical-1.jpg)
-
-Figure 2: Screenshot of the Streamlit interface showing the image prediction. 
+Figure 1: Screenshot of the Streamlit interface showing the clinical data input form and prediction output.
+ 
 ### Image upload
 ![Image upload](https://github.com/Diemlykt/Disease-prediction-apps/blob/179610fd4cb15403a889fd889b82771eeb74c08d/Screenshot/Screenshot%20Image%20update.jpg)
-
+Figure 2: Screenshot of the Streamlit interface showing the image prediction.
 ---
 
 ## Folder Structure
