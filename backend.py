@@ -109,7 +109,7 @@ af file.filename.endswith((".png", ".jpg")):
 @app.post("/predict/clinical")
 async def predict_clinical(patient_id: str):
     # Retrieve patient record
-    record = db["records"].find_one({"patient_id": patient_id})
+    record = db["records"].find_one({"PatientID": patient_id})
     if not record:
         raise HTTPException(status_code=404, detail="Patient not found")
 
