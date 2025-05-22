@@ -97,7 +97,7 @@ AlzheimerProject/
 ├── README.md # Project documentation and instructions
 ├── Streamlit.py # Streamlit frontend application script
 ├── backend.py # FastAPI backend script to handle requests
-├── ping.py # help to keep render alive
+├── ping.py # Script to verify the backend is live and responsive (health check)
 ├── requirements.txt # Python dependencies list
 ```
 ---
