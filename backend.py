@@ -121,7 +121,7 @@ async def upload_image(
             )
 
         # Read file
-        contents = await file.read()
+        contents = file.read()
 
         # Database operation
         image_id = db["images"].insert_one({
@@ -205,7 +205,7 @@ async def predict_image(image_id: str):
             raise HTTPException(status_code=400, detail="Invalid image ID format")
 
         # Get image from database
-        image_doc = await db["images"].find_one({"_id": image_oid})
+        image_doc = db["images"].find_one({"_id": image_oid})
         if not image_doc:
             raise HTTPException(status_code=404, detail="Image not found")
 
