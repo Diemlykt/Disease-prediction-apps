@@ -14,4 +14,3 @@ requests
 uvicorn
 xgboost
 python-multipart
-traceback
