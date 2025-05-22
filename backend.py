@@ -127,9 +127,8 @@ async def upload_image(
         image_id = db["images"].insert_one({
             "filename": file.filename,
             "content": contents,
-            "patient_id": patient_id,
-            "upload_date": datetime.datetime.now()
-        }).inserted_id
+            "patient_id": patient_id
+             }).inserted_id
 
         return {
             "success": True,
