@@ -15,9 +15,9 @@ The solution is built using a microservice architecture with a FastAPI backend, 
 ## Features
 
 - **User Data Input:** Secure interface for clinical data entry by doctors or users.  
-- **Image Upload:** Upload brain MRI/CT images for Alzheimer’s stage prediction.  
+- **Image Upload:** Upload brain MRI images for Alzheimer’s stage prediction.  
 - **Predictive Models:**  
-  - Machine Learning (Random Forest, SVM) for clinical data prediction.  
+  - Machine Learning (XGBoost) for clinical data prediction.  
   - Deep Learning CNN for Alzheimer’s stage classification from images.  
 - **Database Integration:** MongoDB stores all input data and prediction results.  
 - **Backend API:** FastAPI handles inference requests and database operations.  
@@ -35,7 +35,6 @@ The solution is built using a microservice architecture with a FastAPI backend, 
 | Database        | MongoDB (NoSQL)          |
 | Machine Learning| scikit-learn, PyTorch    |
 | Deployment      | Render                   |
-| Containerization| Docker                   |
 
 ---
 
@@ -43,7 +42,7 @@ The solution is built using a microservice architecture with a FastAPI backend, 
 
 ### Clinical Data Prediction
 
-- Algorithms: Logistic Regression, Support Vector Machine (SVM), Random Forest.  
+- Algorithms: "Decision Tree", "Random Forest", "K-Nearest Neighbors", "Logistic Regression", "Support Vector Machine", "XGBoost"
 - Input Features: Demographic and clinical variables related to Alzheimer’s.  
 - Model Selection: Best model chosen using hyperparameter tuning and cross-validation.  
 - Evaluation Metrics: Precision, Recall, F1-score, Classification reports.
@@ -51,7 +50,7 @@ The solution is built using a microservice architecture with a FastAPI backend, 
 ### Image-based Prediction
 
 - Model: Custom CNN implemented in PyTorch for multi-class Alzheimer’s stage classification.  
-- Preprocessing: Image resizing, normalization, augmentation.  
+- Preprocessing: Image resizing, normalization.  
 - Evaluation: Accuracy, confusion matrix, and explainability visualizations.
 
 ---
@@ -66,7 +65,7 @@ The solution is built using a microservice architecture with a FastAPI backend, 
   4. Prediction results are sent back to frontend and stored in MongoDB.  
   5. Users can view and optionally download prediction reports.
 
-- **Deployment:** Docker containers run the backend and frontend, hosted on Render cloud platform for continuous availability.
+- **Deployment:** The backend (FastAPI) and frontend (Streamlit) are deployed on the Render cloud platform for continuous availability and ease of access.
 
 ---
 
