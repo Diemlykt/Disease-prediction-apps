@@ -65,7 +65,7 @@ The solution is built using a microservice architecture with a FastAPI backend, 
   4. Prediction results are sent back to frontend and stored in MongoDB.  
   5. Users can view and optionally download prediction reports.
 
-- **Deployment:** The backend (FastAPI) and frontend (Streamlit) are deployed on the Render cloud platform for continuous availability and ease of access.
+- **Deployment:** The application is deployed on Render using direct Python script deployment with a requirements.txt file. Docker was not used due to time constraints, which may limit scalability but simplifies setup for the prototype. A health check script (ping.py) ensures reliability.
 
 ---
 
@@ -88,6 +88,7 @@ Figure 1: Screenshot of the Streamlit interface showing the clinical data input 
 ### Clinical data upload
 ![CSV upload](https://github.com/Diemlykt/Disease-prediction-apps/blob/179610fd4cb15403a889fd889b82771eeb74c08d/Screenshot/Screenshot%20Clinical-1.jpg)
 
+Figure 2: Screenshot of the Streamlit interface showing the image prediction. 
 ### Image upload
 ![Image upload](https://github.com/Diemlykt/Disease-prediction-apps/blob/179610fd4cb15403a889fd889b82771eeb74c08d/Screenshot/Screenshot%20Image%20update.jpg)
 
@@ -129,7 +130,7 @@ AlzheimerProject/
 - **AlzheimerProject.ipynb** – Jupyter notebook used during model development and experimentation.
 
 ---
-##Limitation
+## Limitation
 Due to a 3-day time constraint, the project faced the following limitations:
 - Data Acquisition: Limited time prevented custom data scraping or collection. The project relies on publicly available Kaggle datasets, which ensured quick access but may introduce biases. Healthcare datasets often require lengthy approval processes, which were not feasible within the timeline.
 - Model Development: The project prioritizes system integration over model training. Pre-trained XGBoost and CNN models from Kaggle were used instead of developing new models, limiting customization for specific use cases and reliance on the quality of Kaggle-sourced models.
