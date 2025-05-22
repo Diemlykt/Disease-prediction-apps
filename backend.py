@@ -218,11 +218,7 @@ async def predict_image(image_id: str):
         try:
             img = Image.open(io.BytesIO(image_data)).convert('RGB')
             image_tensor = transform(img).to(device)
-            
-            if image_tensor.shape != expected_input_shape:
-                raise HTTPException(status_code=400, detail=f"Invalid image dimensions. Expected {expected_input_shape}")
-
-            # Make prediction
+             # Make prediction
             with torch.no_grad():
                 mean = torch.mean(image_tensor).unsqueeze(0)
                 std = torch.std(image_tensor).unsqueeze(0)
