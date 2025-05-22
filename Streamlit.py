@@ -37,10 +37,7 @@ with tab1:
     if st.button("Predict Alzheimer’s (Clinical)"):
         try:
             # Request clinical prediction
-            for doc in db["records"].find():
-                print(doc["PatientID"])
-                print(st.session_state['clinical_patient_id'])
-            response = requests.post(f"{FASTAPI_URL}/predict/clinical", params={"patient_id": st.session_state['clinical_patient_id']})
+            response = requests.post(f"{FASTAPI_URL}/predict/clinical", params={"patient_id": int(st.session_state['clinical_patient_id'])})
             if response.status_code == 200:
                 result = response.json()
                 st.write(f"**Prediction**: {result['prediction']}")
