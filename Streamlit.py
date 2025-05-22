@@ -26,7 +26,7 @@ with tab1:
                     result = response.json()
                     st.success(f"{result['status']}")
                     st.write(f"Record IDs: {', '.join(result['ids'])}")
-                    st.session_state['clinical_patient_id'] = result['patient_ids'][0]
+                    st.session_state['clinical_patient_id'] = result['patient_ids']
 
                 else:
                     st.error(f"Upload failed: {response.json().get('detail', 'Unknown error')}")
@@ -37,7 +37,7 @@ with tab1:
     if st.button("Predict Alzheimer’s (Clinical)"):
         try:
             # Request clinical prediction
-            response = requests.post(f"{FASTAPI_URL}/predict/clinical", params={"patient_id": int(st.session_state['clinical_patient_id'])})
+            response = requests.post(f"{FASTAPI_URL}/predict/clinical", params={"patient_id": int(st.session_state['clinical_patient_id'][0])})
             if response.status_code == 200:
                 result = response.json()
                 st.write(f"**Prediction**: {result['prediction']}")
