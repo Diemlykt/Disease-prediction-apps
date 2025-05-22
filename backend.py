@@ -107,12 +107,14 @@ async def upload_csv(file: UploadFile = File(...)):
 @app.post("/upload/image")
 async def upload_image(patient_id: str, file: UploadFile = File(...)):
     try:
-        if not file.filename.endswith((".png", ".jpg", ".jpeg")):
-            raise HTTPException(status_code=400, detail="Invalid file type. Only PNG/JPG supported.")
-        
+        if not file.filename.lower().endswith((".png", ".jpg", ".jpeg")):
+            return JSONResponse(
+                status_code=400,
+                content={"detail": "Invalid file type. Only PNG/JPG supported."}
+            )
+
         contents = await file.read()
-        
-        # Save the file and insert into MongoDB (simulate)
+
         image_id = db["images"].insert_one({
             "filename": file.filename,
             "content": contents,
@@ -126,7 +128,10 @@ async def upload_image(patient_id: str, file: UploadFile = File(...)):
 
     except Exception as e:
         traceback.print_exc()
-        raise HTTPException(status_code=500, detail="Internal server error")
+        return JSONResponse(
+            status_code=500,
+            content={"detail": f"Internal server error: {str(e)}"}
+        )
 
 @app.post("/predict/clinical")
 async def predict_clinical(patient_id: str):
