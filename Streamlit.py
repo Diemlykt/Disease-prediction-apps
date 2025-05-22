@@ -128,17 +128,17 @@ with tab2:
                 if response.status_code == 200:
                     result = response.json()
                     st.success(f"{result['status']}")
-                    st.session_state['image_id'] = result['image_id']
+                    st.session_state['uploaded_image_id'] = result['image_id']
                     st.session_state['image_patient_id'] = patient_id_image
                 else:
                     st.error(f"Upload failed: {response.json().get('detail', 'Unknown error')}")
             except Exception as e:
                 st.error(f"Error: {str(e)}")
     
-    if st.button("Predict Alzheimer’s (MRI)") and 'image_id' in st.session_state:
+    if st.button("Predict Alzheimer’s (MRI)") and 'uploaded_image_id' in st.session_state:
         try:
             # Request image prediction
-            response = requests.post(f"{FASTAPI_URL}/predict/image", params={"image_id": st.session_state['image_id']})
+            response = requests.post(f"{FASTAPI_URL}/predict/image", params={"image_id": st.session_state['uploaded_image_id']})
             if response.status_code == 200:
                 result = response.json()
                 st.write(f"**Prediction**: {result['prediction']}")
