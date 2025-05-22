@@ -5,7 +5,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_DIR = os.path.join(BASE_DIR, 'Model')
 sys.path.append(MODEL_DIR)
 import torch
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import Form, FastAPI, UploadFile, File, HTTPException
 from pymongo import MongoClient
 import gridfs
 import pandas as pd
@@ -108,32 +108,39 @@ async def upload_csv(file: UploadFile = File(...)):
 
 
 @app.post("/upload/image")
-async def upload_image(patient_id: str, file: UploadFile = File(...)):
+async def upload_image(
+    patient_id: str = Form(...),  # Accept as form data
+    file: UploadFile = File(...)
+):
     try:
+        # File validation
         if not file.filename.lower().endswith((".png", ".jpg", ".jpeg")):
             return JSONResponse(
                 status_code=400,
-                content={"detail": "Invalid file type. Only PNG/JPG supported."}
+                content={"success": False, "detail": "Invalid file type"}
             )
 
+        # Read file
         contents = await file.read()
 
+        # Database operation
         image_id = db["images"].insert_one({
             "filename": file.filename,
             "content": contents,
-            "patient_id": patient_id
+            "patient_id": patient_id,
+            "upload_date": datetime.datetime.now()
         }).inserted_id
 
-        return JSONResponse(content={
-            "status": "Image uploaded successfully",
+        return {
+            "success": True,
+            "message": "Image uploaded successfully",
             "image_id": str(image_id)
-        })
+        }
 
     except Exception as e:
-        traceback.print_exc()
         return JSONResponse(
             status_code=500,
-            content={"detail": f"Internal server error: {str(e)}"}
+            content={"success": False, "detail": str(e)}
         )
 
 @app.post("/predict/clinical")
