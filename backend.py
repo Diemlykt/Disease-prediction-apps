@@ -32,6 +32,7 @@ xgboost_path = os.path.join(BASE_DIR, 'Model', 'xgboost_model.pkl')
 
 app = FastAPI()
 
+#to keep render alive
 @app.get("/ping")
 async def ping():
     return {"message": "pong"}
