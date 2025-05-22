@@ -1,65 +1,3 @@
-# import streamlit as st
-# import requests
-# import json
-
-# st.title("Alzheimer’s Prediction System")
-
-# tab1, tab2 = st.tabs(["Clinical Data Upload", "MRI Image Upload"])
-
-# with tab1:
-#     st.header("Upload Clinical Data (CSV)")
-#     patient_id_clinical = st.text_input("Patient ID (Clinical)", "P001", key="clinical_id")
-#     clinical_file = st.file_uploader("Upload CSV (e.g., age, MMSE)", type=["csv"], key="clinical_upload")
-#     if clinical_file and patient_id_clinical:
-#         if st.button("Upload Clinical Data"):
-#             url = "https://disease-prediction-apps.onrender.com/upload/csv"
-#             response = requests.post(url, files={"file": clinical_file})
-#             st.write(response.json())
-#     if st.button("Predict Alzheimer’s (Clinical)"):
-#         url = f"https://disease-prediction-apps.onrender.com/predict/clinical?patient_id={patient_id_clinical}"
-#         response = requests.post(url)
-#         if response.status_code == 200:
-#             result = response.json()
-#             st.write(f"Prediction: {result['prediction']}")
-#             st.write("Probabilities:")
-#             for class_name, prob in result['probabilities'].items():
-#                 st.write(f"{class_name}: {prob:.2%}")
-#         else:
-#             try:
-#                 error_detail = response.json().get('detail', 'Prediction failed')
-#             except Exception:
-#                 error_detail = f"Backend error: {response.text[:300]}"  # Show raw response safely
-#             st.error(error_detail)
-
-# with tab2:
-#     st.header("Upload MRI Image")
-#     patient_id_image = st.text_input("Patient ID (Image)", "P001", key="image_id")
-#     image_file = st.file_uploader("Upload MRI (PNG/JPG)", type=["png", "jpg"], key="image_upload")
-#     if image_file and patient_id_image:
-#         if st.button("Upload Image"):
-#             url = f"https://disease-prediction-apps.onrender.com/upload/image?patient_id={patient_id_image}"
-#             response = requests.post(url, files={"file": image_file})
-#             if response.status_code == 200:
-#                 image_id = response.json().get('image_id')
-#                 st.session_state['image_id'] = image_id
-#                 st.write(response.json())
-#             else:
-#                 st.error(response.json().get('detail', 'Upload failed'))
-#     if st.button("Predict Alzheimer’s (MRI)") and 'image_id' in st.session_state:
-#         url = f"https://disease-prediction-apps.onrender.com/predict/image?image_id={st.session_state['image_id']}"
-#         response = requests.post(url)
-#         if response.status_code == 200:
-#             result = response.json()
-#             st.write(f"Prediction: {result['prediction']}")
-#             st.write("Probabilities:")
-#             for class_name, prob in result['probabilities'].items():
-#                 st.write(f"{class_name}: {prob:.2%}")
-#         else:
-#             st.error(response.json().get('detail', 'Prediction failed'))
-
-
-
-
 import streamlit as st
 import requests
 import pandas as pd
@@ -96,7 +34,7 @@ with tab1:
                 st.error(f"Error: {str(e)}")
     
     # if st.button("Predict Alzheimer’s (Clinical)") and 'clinical_patient_id' in st.session_state:
-    if st.button("Predict Alzheimer’s (Clinical)") in st.session_state:
+    if st.button("Predict Alzheimer’s (Clinical)"):
         try:
             # Request clinical prediction
             response = requests.post(f"{FASTAPI_URL}/predict/clinical", params={"patient_id": st.session_state['clinical_patient_id']})
@@ -157,7 +95,7 @@ with tab2:
             except Exception as e:
                 st.error(f"Error: {str(e)}")
     
-    if st.button("Predict Alzheimer’s (MRI)") and 'uploaded_image_id' in st.session_state:
+    if st.button("Predict Alzheimer’s (MRI)") and 'uploaded_image_id':
         try:
             # Request image prediction
             response = requests.post(f"{FASTAPI_URL}/predict/image", params={"image_id": st.session_state['uploaded_image_id']})
