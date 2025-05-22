@@ -136,7 +136,8 @@ async def upload_image(patient_id: str, file: UploadFile = File(...)):
 @app.post("/predict/clinical")
 async def predict_clinical(patient_id: str):
     # Retrieve patient record
-    record = db["records"].find_one({"PatientID": patient_id})
+    patient_id_int = int(patient_id)
+    record = db["records"].find_one({"PatientID": patient_id_int})
     if not record:
         raise HTTPException(status_code=404, detail="Patient not found")
 
