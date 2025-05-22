@@ -100,7 +100,7 @@ AlzheimerProject/
 ├── ping.py # Health-check endpoint or test script
 ├── requirements.txt # Python dependencies list
 
-'''
+---
 ### Description of Key Files
 
 - **CNN.pt** – Pretrained deep learning model for image-based Alzheimer’s stage prediction.
