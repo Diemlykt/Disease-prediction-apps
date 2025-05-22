@@ -211,8 +211,8 @@ async def predict_image(image_id: str):
 
         # Async file read
 
-        file = fs.get(image_oid)  
-        image_data = file.read()  
+        image_data = image_doc["content"]
+
 
         # Process image
         try:
