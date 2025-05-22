@@ -79,7 +79,7 @@ with tab2:
                     except ValueError:
                         st.error("Server returned invalid response format")
                         st.code(response.text, language='text')
-                        return
+                        
 
                     if response.status_code == 200:
                         if result.get('success', False):
