@@ -2,11 +2,11 @@
 
 ## Project Overview
 
-This project is an AI-powered application designed to predict Alzheimer’s disease presence and stage by integrating clinical data and medical imaging analysis. The system assists healthcare professionals by providing reliable, early diagnostic support and disease staging, enhancing patient care and treatment decisions.
+This project is an AI-powered application designed to predict Alzheimer’s disease presence and stage by integrating clinical data and medical imaging analysis. The primary focus is on building a functional, end-to-end system, including a user-friendly interface, backend API, and cloud deployment, rather than training optimized machine learning models. Due to a 3-day time constraint, pre-trained models from Kaggle were used to expedite development, ensuring a working prototype that assists healthcare professionals with early diagnostic support and disease staging.
 
 The app features two core predictive functions:  
 1. **Clinical Data Prediction:** Traditional machine learning models analyze patient clinical information to predict Alzheimer’s disease presence (Yes/No).  
-2. **Image-based Prediction:** Deep learning models analyze brain MRI or CT scans to classify the stage of Alzheimer’s disease.
+2. **Image-based Prediction:** Deep learning models analyze brain MRI scans to classify the stage of Alzheimer’s disease
 
 The solution is built using a microservice architecture with a FastAPI backend, Streamlit frontend, and MongoDB for data storage. It is containerized and deployed on Render cloud for scalability and accessibility.
 
@@ -49,9 +49,9 @@ The solution is built using a microservice architecture with a FastAPI backend, 
 
 ### Image-based Prediction
 
-- Model: Custom CNN implemented in PyTorch for multi-class Alzheimer’s stage classification.  
+- Model: Pre-trained CNN sourced from Kaggle (https://www.kaggle.com/code/metinusta/oasis-alzheimer-s-detection-training), implemented in PyTorch for multi-class Alzheimer’s stage classification.  
 - Preprocessing: Image resizing, normalization.  
-- Evaluation: Accuracy, confusion matrix, and explainability visualizations.
+- Evaluation: Accuracy.
 
 ---
 
@@ -80,6 +80,19 @@ The solution is built using a microservice architecture with a FastAPI backend, 
 
 ---
 
+## User Interface
+The Streamlit frontend provides an intuitive interface for healthcare professionals to input clinical data or upload brain MRI/CT scans. Prediction results are displayed instantly, with options to view confidence scores and download reports. The interface is designed for ease of use, ensuring seamless integration into clinical workflows.
+
+Figure 1: Screenshot of the Streamlit interface showing the clinical data input form and prediction output. 
+
+### Clinical data upload
+![CSV upload](https://github.com/Diemlykt/Disease-prediction-apps/blob/179610fd4cb15403a889fd889b82771eeb74c08d/Screenshot/Screenshot%20Clinical-1.jpg)
+
+### Image upload
+![Image upload](https://github.com/Diemlykt/Disease-prediction-apps/blob/179610fd4cb15403a889fd889b82771eeb74c08d/Screenshot/Screenshot%20Image%20update.jpg)
+
+---
+
 ## Folder Structure
 ```
 AlzheimerProject/
@@ -98,6 +111,8 @@ AlzheimerProject/
 ├── backend.py               # FastAPI backend script to handle requests
 ├── ping.py                  # Script to verify the backend is live and responsive (health check)
 ├── requirements.txt         # Python dependencies list
+├── Screenshot               # screenshot of apps
+├── example_file             # CSV files and images that you can upload and test the app
 ```
 ---
 ### Description of Key Files
@@ -113,14 +128,25 @@ AlzheimerProject/
 - **ping.py** – Script to verify the backend is live and responsive (health check).
 - **AlzheimerProject.ipynb** – Jupyter notebook used during model development and experimentation.
 
+---
+##Limitation
+Due to a 3-day time constraint, the project faced the following limitations:
+- Data Acquisition: Limited time prevented custom data scraping or collection. The project relies on publicly available Kaggle datasets, which ensured quick access but may introduce biases. Healthcare datasets often require lengthy approval processes, which were not feasible within the timeline.
+- Model Development: The project prioritizes system integration over model training. Pre-trained XGBoost and CNN models from Kaggle were used instead of developing new models, limiting customization for specific use cases and reliance on the quality of Kaggle-sourced models.
+- Deployment: Docker was not used due to time constraints and complexity, with the app deployed directly on Render using Python scripts. This may limit scalability and reproducibility compared to containerized deployment.
+- Model Robustness: The pre-trained models were not fine-tuned or validated on external datasets due to time constraints, potentially reducing generalizability to real-world clinical scenarios. Future work includes collecting custom datasets, fine-tuning models, and implementing Docker for improved deployment.
+
+---
 
 ## Future Work
 
-- Add user authentication and role-based access control.  
-- Expand dataset to improve image model accuracy and robustness.  
-- Implement downloadable PDF reports with visualizations and explanations.  
-- Develop notification system for prediction updates and reminders.  
-- Extend support for other neurodegenerative diseases and comorbid conditions.
+- Implement user authentication and role-based access control.
+- Collect and integrate diverse datasets (e.g., ADNI) for improved model performance.
+- Fine-tune pre-trained models for specific use cases.
+- Add downloadable PDF reports with visualizations.
+- Develop a notification system for prediction updates.
+- Extend support for other neurodegenerative diseases.
+- Incorporate Docker for scalable deployment.
 
 ---
 
