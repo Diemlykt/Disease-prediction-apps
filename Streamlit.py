@@ -97,17 +97,81 @@ with tab2:
                     st.error(f"Unexpected error: {str(e)}")
                     st.error(traceback.format_exc())
     
-    if st.button("Predict Alzheimer’s (MRI)") and 'uploaded_image_id':
-        try:
-            # Request image prediction
-            response = requests.post(f"{FASTAPI_URL}/predict/image", params={"image_id": st.session_state['uploaded_image_id']})
-            if response.status_code == 200:
-                result = response.json()
-                st.write(f"**Prediction**: {result['prediction']}")
-                st.write("**Probabilities**:")
-                for class_name, prob in result['probabilities'].items():
-                    st.write(f"{class_name}: {prob:.2%}")
-            else:
-                st.error(f"Prediction failed: {response.json().get('detail', 'Unknown error')}")
-        except Exception as e:
-            st.error(f"Error: {str(e)}")
+    # if st.button("Predict Alzheimer’s (MRI)") and 'uploaded_image_id':
+    #     try:
+    #         # Request image prediction
+    #         response = requests.post(f"{FASTAPI_URL}/predict/image", params={"image_id": st.session_state['uploaded_image_id']})
+    #         if response.status_code == 200:
+    #             result = response.json()
+    #             st.write(f"**Prediction**: {result['prediction']}")
+    #             st.write("**Probabilities**:")
+    #             for class_name, prob in result['probabilities'].items():
+    #                 st.write(f"{class_name}: {prob:.2%}")
+    #         else:
+    #             st.error(f"Prediction failed: {response.json().get('detail', 'Unknown error')}")
+    #     except Exception as e:
+    #         st.error(f"Error: {str(e)}")
+
+
+    if st.button("Predict Alzheimer's (MRI)"):
+        # Validate session state
+        if 'uploaded_image_id' not in st.session_state:
+            st.warning("Please upload an MRI image first")
+            st.stop()
+    
+        with st.spinner("Analyzing MRI scan..."):
+            try:
+                response = requests.post(
+                    f"{FASTAPI_URL}/predict/image",
+                    params={"image_id": st.session_state['uploaded_image_id']},
+                    timeout=45  # Increased timeout for model inference
+                )
+                
+                if response.status_code == 200:
+                    result = response.json()
+                    
+                    # Create two columns for better layout
+                    col1, col2 = st.columns([1, 2])
+                    
+                    with col1:
+                        st.subheader("Diagnosis")
+                        # Color code based on prediction
+                        status_color = {
+                            'Non-Demented': 'green',
+                            'Very Mild Demented': 'blue',
+                            'Mild Demented': 'orange',
+                            'Moderate Demented': 'red'
+                        }.get(result['prediction'], 'gray')
+                        
+                        st.markdown(f"""
+                        <div style='
+                            border-left: 5px solid {status_color};
+                            padding: 1rem;
+                            margin: 1rem 0;
+                        '>
+                            <h3 style='color: {status_color}; margin-top: 0;'>
+                                {result['prediction']}
+                            </h3>
+                            <p>Confidence: {max(result['probabilities'].values()):.1%}</p>
+                        </div>
+                        """, unsafe_allow_html=True)
+                    
+                    with col2:
+                        st.subheader("Probability Breakdown")
+                        for class_name, prob in sorted(
+                            result['probabilities'].items(),
+                            key=lambda x: x[1],
+                            reverse=True
+                        ):
+                            # Create a progress bar with label
+                            st.write(f"**{class_name}**")
+                            st.progress(prob, text=f"{prob:.2%}")
+                
+                else:
+                    error_detail = response.json().get('detail', 'Unknown error')
+                    st.error(f"Prediction failed: {error_detail}")
+                    
+            except requests.exceptions.Timeout:
+                st.error("Analysis timed out. The model might be processing other requests.")
+            except Exception as e:
+                st.error(f"An unexpected error occurred: {str(e)}")
