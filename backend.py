@@ -31,6 +31,11 @@ xgboost_path = os.path.join(BASE_DIR, 'Model', 'xgboost_model.pkl')
 # Example: load a PyTorch model
 
 app = FastAPI()
+
+@app.get("/ping")
+async def ping():
+    return {"message": "pong"}
+    
 client = MongoClient("mongodb+srv://diemly:fQg9TNKzmmRd9g9M@alzheimer.x2velvm.mongodb.net/?retryWrites=true&w=majority&appName=Alzheimer")
 db = client["health_data"]
 fs = gridfs.GridFS(db)
