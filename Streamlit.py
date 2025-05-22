@@ -113,7 +113,7 @@ with tab1:
 
 with tab2:
     st.header("Upload MRI Image")
-    patient_id_image = st.text_input("Patient ID (Image)", "P001", key="image_id")
+    patient_id_image = st.text_input("Patient ID (Image)", "P001", key="patient_id_image")
     image_file = st.file_uploader("Upload MRI (PNG/JPG)", type=["png", "jpg"], key="image_upload")
     
     if image_file and patient_id_image:
