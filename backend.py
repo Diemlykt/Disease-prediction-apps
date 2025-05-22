@@ -121,7 +121,7 @@ async def upload_image(
             )
 
         # Read file
-        contents = file.read()
+        contents = await file.read()
 
         # Database operation
         image_id = db["images"].insert_one({
