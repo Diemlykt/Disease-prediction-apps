@@ -82,7 +82,7 @@ The solution is built using a microservice architecture with a FastAPI backend, 
 ---
 
 ## Folder Structure
-
+```
 AlzheimerProject/
 ├── Model/ # Contains models and training utilities
 │ ├── CNN.pt # Trained CNN model for image-based prediction
@@ -99,7 +99,7 @@ AlzheimerProject/
 ├── backend.py # FastAPI backend script to handle requests
 ├── ping.py # Health-check endpoint or test script
 ├── requirements.txt # Python dependencies list
-
+```
 ---
 ### Description of Key Files
 
