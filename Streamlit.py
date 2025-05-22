@@ -134,27 +134,26 @@ with tab2:
                 # else:
                 #     st.error(f"Upload failed: {response.json().get('detail', 'Unknown error')}")
 
-            # For /upload/image
-                response = requests.post(
-                    f"{FASTAPI_URL}/upload/image",
+                response = requests.post(f"{FASTAPI_URL}/upload/image",
                     params={"patient_id": patient_id_image},
                     files={"file": image_file}
                 )
-                if response.status_code != 200:
-                    st.error(f"Request failed: Status {response.status_code}, Response: {response.text}")
-                    st.stop()
+                
                 try:
                     result = response.json()
+                except ValueError:
+                    st.error("Server did not return a valid JSON response.")
+                    st.error(f"Response text: {response.text}")
+                    raise
+                
+                if response.status_code == 200:
                     st.success(f"{result['status']}")
                     st.session_state['uploaded_image_id'] = result['image_id']
                     st.session_state['image_patient_id'] = patient_id_image
-                except ValueError as e:
-                    st.error(f"JSON decode error: {str(e)}")
-                    st.error(f"Response content: {response.text}")
+                else:
+                    st.error(f"Upload failed: {result.get('detail', 'Unknown error')}")
 
-
-
-                
+               
             except Exception as e:
                 st.error(f"Error: {str(e)}")
     
