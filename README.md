@@ -84,21 +84,21 @@ The solution is built using a microservice architecture with a FastAPI backend, 
 ## Folder Structure
 ```
 AlzheimerProject/
-├── Model/ # Contains models and training utilities
-│ ├── CNN.pt # Trained CNN model for image-based prediction
-│ ├── dataset.py # Dataset loader and transformer for image data
-│ ├── model2use.py # Model loading and prediction functions
-│ ├── scaler.pkl # Scaler used for normalizing clinical data
+├── Model/                   # Contains models and training utilities
+│ ├── CNN.pt                 # Trained CNN model for image-based prediction
+│ ├── dataset.py             # Dataset loader and transformer for image data
+│ ├── model2use.py           # Model loading and prediction functions
+│ ├── scaler.pkl             # Scaler used for normalizing clinical data
 │ ├── train_test_val_running.py # Script for training and evaluating models
-│ ├── xgboost_model.json # Trained XGBoost model (clinical data, serialized in JSON)
-│ └── xgboost_model.pkl # Trained XGBoost model (pickle format)
-├── .gitattributes # Git attributes for consistent repository behavior
-├── AlzheimerProject.ipynb # Jupyter Notebook for exploratory analysis and prototyping
-├── README.md # Project documentation and instructions
-├── Streamlit.py # Streamlit frontend application script
-├── backend.py # FastAPI backend script to handle requests
-├── ping.py # Script to verify the backend is live and responsive (health check)
-├── requirements.txt # Python dependencies list
+│ ├── xgboost_model.json     # Trained XGBoost model (clinical data, serialized in JSON)
+│ └── xgboost_model.pkl      # Trained XGBoost model (pickle format)
+├── .gitattributes           # Git attributes for consistent repository behavior
+├── AlzheimerProject.ipynb   # Jupyter Notebook for exploratory analysis and prototyping
+├── README.md                # Project documentation and instructions
+├── Streamlit.py             # Streamlit frontend application script
+├── backend.py               # FastAPI backend script to handle requests
+├── ping.py                  # Script to verify the backend is live and responsive (health check)
+├── requirements.txt         # Python dependencies list
 ```
 ---
 ### Description of Key Files
