@@ -56,25 +56,15 @@ with tab2:
     
     if image_file and patient_id_image:
         if st.button("Upload Image"):
-            try:
-                # Send image to FastAPI
-                
-                # response = requests.post(
-                #     f"{FASTAPI_URL}/upload/image",
-                #     params={"patient_id": patient_id_image},
-                #     files={"file": image_file}
-                # )
-                # if response.status_code == 200:
-                #     result = response.json()
-                #     st.success(f"{result['status']}")
-                #     st.session_state['uploaded_image_id'] = result['image_id']
-                #     st.session_state['image_patient_id'] = patient_id_image
-                # else:
-                #     st.error(f"Upload failed: {response.json().get('detail', 'Unknown error')}")
+            try:                
+                files = {
+                    "file": (image_file.name, image_file.getvalue(), image_file.type)
+                }
 
+                
                 response = requests.post(f"{FASTAPI_URL}/upload/image",
                     params={"patient_id": patient_id_image},
-                    files={"file": image_file}
+                    files= files
                 )
                 
                 try:
