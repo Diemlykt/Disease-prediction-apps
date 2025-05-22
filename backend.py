@@ -21,7 +21,7 @@ import joblib
 from fastapi.middleware.cors import CORSMiddleware
 import xgboost as xgb
 from fastapi.responses import JSONResponse
-
+from gridfs import GridFS
 
 
 # Get the directory where backend.py is located
@@ -173,23 +173,77 @@ async def predict_clinical(patient_id: str):
     }
 }
 
+# @app.post("/predict/image")
+# async def predict_image(image_id: str):
+#     image_doc = db["images"].find_one({"image_id": ObjectId(image_id)})
+#     if not image_doc:
+#         raise HTTPException(status_code=404, detail="Image not found")
+#     image_data = fs.get(image_doc["image_id"]).read()
+#     img = Image.open(io.BytesIO(image_data)).convert('RGB')
+#     image_tensor = transform(img).to(device)
+#     with torch.no_grad():
+#         mean = torch.mean(image_tensor).unsqueeze(0)
+#         std = torch.std(image_tensor).unsqueeze(0)
+#         imaging_model = get_imaging_model()
+#         outputs = imaging_model(image_tensor.unsqueeze(0), mean, std).squeeze().cpu().numpy()
+#         pred = torch.argmax(outputs, dim=1)
+#     class_names = ['Non-Demented', 'Very Mild Demented', 'Mild Demented', 'Moderate Demented']
+#     return {
+#         "image_id": image_id,
+#         "prediction": class_names[pred],
+#         "probabilities": {class_names[i]: float(outputs[i]) for i in range(len(class_names))}
+#     }
+
+
 @app.post("/predict/image")
 async def predict_image(image_id: str):
-    image_doc = db["images"].find_one({"image_id": ObjectId(image_id)})
-    if not image_doc:
-        raise HTTPException(status_code=404, detail="Image not found")
-    image_data = fs.get(image_doc["image_id"]).read()
-    img = Image.open(io.BytesIO(image_data)).convert('RGB')
-    image_tensor = transform(img).to(device)
-    with torch.no_grad():
-        mean = torch.mean(image_tensor).unsqueeze(0)
-        std = torch.std(image_tensor).unsqueeze(0)
-        imaging_model = get_imaging_model()
-        outputs = imaging_model(image_tensor.unsqueeze(0), mean, std).squeeze().cpu().numpy()
-        pred = torch.argmax(outputs, dim=1)
-    class_names = ['Non-Demented', 'Very Mild Demented', 'Mild Demented', 'Moderate Demented']
-    return {
-        "image_id": image_id,
-        "prediction": class_names[pred],
-        "probabilities": {class_names[i]: float(outputs[i]) for i in range(len(class_names))}
-    }
+    try:
+        # Validate image_id format
+        try:
+            image_oid = ObjectId(image_id)
+        except:
+            raise HTTPException(status_code=400, detail="Invalid image ID format")
+
+        # Get image from database
+        image_doc = await db["images"].find_one({"_id": image_oid})
+        if not image_doc:
+            raise HTTPException(status_code=404, detail="Image not found")
+
+        # Async file read
+
+        file = fs.get(image_oid)  
+        image_data = file.read()  
+
+        # Process image
+        try:
+            img = Image.open(io.BytesIO(image_data)).convert('RGB')
+            image_tensor = transform(img).to(device)
+            
+            if image_tensor.shape != expected_input_shape:
+                raise HTTPException(status_code=400, detail=f"Invalid image dimensions. Expected {expected_input_shape}")
+
+            # Make prediction
+            with torch.no_grad():
+                mean = torch.mean(image_tensor).unsqueeze(0)
+                std = torch.std(image_tensor).unsqueeze(0)
+                imaging_model = get_imaging_model()
+                outputs = imaging_model(image_tensor.unsqueeze(0), mean, std)
+                probs = outputs.squeeze().cpu().numpy()
+                pred = torch.argmax(outputs).item()
+
+        except Exception as e:
+            raise HTTPException(status_code=422, detail=f"Image processing failed: {str(e)}")
+
+        class_names = ['Non-Demented', 'Very Mild Demented', 'Mild Demented', 'Moderate Demented']
+        
+        return {
+            "success": True,
+            "image_id": str(image_oid),
+            "prediction": class_names[pred],
+            "probabilities": {class_names[i]: float(probs[i]) for i in range(len(class_names))}
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
