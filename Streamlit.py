@@ -52,38 +52,50 @@ with tab1:
 with tab2:
     st.header("Upload MRI Image")
     patient_id_image = st.text_input("Patient ID (Image)", "P001", key="patient_id_image")
-    image_file = st.file_uploader("Upload MRI (PNG/JPG)", type=["png", "jpg"], key="image_upload")
+    image_file = st.file_uploader("Upload MRI (PNG/JPG)", type=["png", "jpg", "jpeg"], key="image_upload")
     
     if image_file and patient_id_image:
         if st.button("Upload Image"):
-            try:                
-                files = {
-                    "file": (image_file.name, image_file.getvalue(), image_file.type)
-                }
-
-                
-                response = requests.post(f"{FASTAPI_URL}/upload/image",
-                    params={"patient_id": patient_id_image},
-                    files= files
-                )
-                
+            with st.spinner("Uploading image..."):
                 try:
-                    result = response.json()
-                except ValueError:
-                    st.error("Server did not return a valid JSON response.")
-                    st.error(f"Response text: {response.text}")
-                    raise
-                
-                if response.status_code == 200:
-                    st.success(f"{result['status']}")
-                    st.session_state['uploaded_image_id'] = result['image_id']
-                    st.session_state['image_patient_id'] = patient_id_image
-                else:
-                    st.error(f"Upload failed: {result.get('detail', 'Unknown error')}")
+                    # Prepare the request
+                    files = {
+                        "file": (image_file.name, image_file.getvalue(), image_file.type)
+                    }
+                    data = {
+                        "patient_id": patient_id_image  # Send as form data
+                    }
 
-               
-            except Exception as e:
-                st.error(f"Error: {str(e)}")
+                    # Make the request
+                    response = requests.post(
+                        f"{FASTAPI_URL}/upload/image",
+                        files=files,
+                        data=data  # Changed from params to data
+                    )
+                    
+                    # Handle response
+                    try:
+                        result = response.json()
+                    except ValueError:
+                        st.error("Server returned invalid response format")
+                        st.code(response.text, language='text')
+                        return
+
+                    if response.status_code == 200:
+                        if result.get('success', False):
+                            st.success(result.get('message', result.get('status', 'Image uploaded successfully')))
+                            st.session_state['uploaded_image_id'] = result['image_id']
+                            st.session_state['image_patient_id'] = patient_id_image
+                        else:
+                            st.error(result.get('detail', 'Upload failed (server reported failure)'))
+                    else:
+                        st.error(f"Upload failed (HTTP {response.status_code}): {result.get('detail', 'Unknown error')}")
+
+                except requests.exceptions.RequestException as e:
+                    st.error(f"Network error: {str(e)}")
+                except Exception as e:
+                    st.error(f"Unexpected error: {str(e)}")
+                    st.error(traceback.format_exc())
     
     if st.button("Predict Alzheimer’s (MRI)") and 'uploaded_image_id':
         try:
