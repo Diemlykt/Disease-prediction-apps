@@ -4,7 +4,7 @@ import pandas as pd
 import json
 
 # FastAPI URL (update for production or ngrok for Colab)
-FASTAPI_URL = "https://disease-prediction-apps.onrender.com"  # Replace with ngrok URL for Colab testing
+FASTAPI_URL = "https://disease-prediction-apps.onrender.com"  
 
 st.title("Alzheimer’s Detection System")
 
