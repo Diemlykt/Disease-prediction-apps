@@ -94,7 +94,7 @@ Scan the QR code below to access the deployed Alzheimer’s Disease Prediction A
 
  
 ### MRI Image upload interface
-![Image upload](https://github.com/Diemlykt/Disease-prediction-apps/blob/179610fd4cb15403a889fd889b82771eeb74c08d/Screenshot/Screenshot%20Image%20update.jpg)
+![Image upload](https://github.com/Diemlykt/Disease-prediction-apps/blob/8fb00d5500c9ad7eb330504345c3c3c67b9626d3/Screenshot/Screenshot%20Image%20%20%20.jpg)
 
 ---
 
