@@ -103,13 +103,14 @@ async def upload_csv(file: UploadFile = File(...)):
         return {"status": f"Uploaded {len(records)} records", "ids": [str(id) for id in result.inserted_ids], "patient_ids": df["PatientID"].tolist()}
     raise HTTPException(status_code=400, detail="Invalid file")
 
-sync def upload_image(patient_id: str, file: UploadFile = File(...)):
-    i@app.post("/upload/image")
-af file.filename.endswith((".png", ".jpg")):
-        image_data = await file.read()
-        image_id = fs.put(image_data, filename=file.filename)
-        db["images"].insert_one({"image_id": image_id, "patient_id": patient_id, "filename": file.filename})
-        return {"status": "Image uploaded", "image_id": str(image_id)}
+
+@app.post("/upload/image")
+async def upload_image(patient_id: str, file: UploadFile = File(...)):
+    if file.filename.endswith((".png", ".jpg")):
+            image_data = await file.read()
+            image_id = fs.put(image_data, filename=file.filename)
+            db["images"].insert_one({"image_id": image_id, "patient_id": patient_id, "filename": file.filename})
+            return {"status": "Image uploaded", "image_id": str(image_id)}
     raise HTTPException(status_code=400, detail="Invalid file")
 
 @app.post("/predict/clinical")
