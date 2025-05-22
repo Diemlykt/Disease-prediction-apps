@@ -20,6 +20,8 @@ from model2use import CNN  # Import your model definitions
 import joblib
 from fastapi.middleware.cors import CORSMiddleware
 import xgboost as xgb
+from fastapi.responses import JSONResponse
+
 
 
 # Get the directory where backend.py is located
